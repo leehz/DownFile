@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:id="@+id/link"
+        android:text="http://i.itmp.top/linux.png"
         android:layout_below="@+id/tv"/>
     <Button
         android:layout_width="wrap_content"
