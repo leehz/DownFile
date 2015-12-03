@@ -8,12 +8,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -23,7 +25,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.MalformedInputException;
-import java.util.logging.LogRecord;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,13 +70,16 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             //super.run();
                             try {
-                                URL url = new URL(editText.getText().toString());
+                                URL url = new URL("https://www.baidu.com/index.html");
                                 urlConnection = url.openConnection();
-                                if (urlConnection.getReadTimeout() == 5) {
+                                urlConnection.setRequestProperty("Accept-Encoding", "identity");
+                               // urlConnection.connect();
+                                /*if (urlConnection.getReadTimeout() == 5) {
                                     Toast.makeText(getApplicationContext(), "当前网络可能有问题", Toast.LENGTH_SHORT).show();
                                     return;
-                                }
-                                inputStream = urlConnection.getInputStream();
+                                }*/
+                                //inputStream = urlConnection.getInputStream();
+                                inputStream = new BufferedInputStream(urlConnection.getInputStream());
                                 downFileLength = urlConnection.getContentLength();
                             } catch (MalformedInputException e) {
                                 e.printStackTrace();
@@ -89,11 +93,13 @@ public class MainActivity extends AppCompatActivity {
                             String filePath = Environment.getExternalStorageDirectory().toString() + File.separator + "downfiles" + File.separator + downFileName;
                             File file = new File(filePath);
                             if (!file.getParentFile().exists()) {
-                                file.mkdir();
+                                file.getParentFile().mkdir();
+                                Log.d("create dirs", file.getParentFile().getAbsolutePath().toString());
                             }
                             if (file.exists()) {
                                 // todo a dialog to ask user cancel or not
-                                Toast.makeText(getApplicationContext(), "文件已存在", Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(getApplicationContext(), "文件已存在", Toast.LENGTH_SHORT).show();
+                                Log.d("dirs", "file created successfully");
                                 return;
                             } else {
                                 try {
@@ -129,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     };
-                    thread.run();
+                    thread.start();
                 }
             }
 
