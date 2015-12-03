@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             //super.run();
                             try {
-                                URL url = new URL("https://www.baidu.com/index.html");
+                                URL url = new URL(editText.getText().toString());
                                 urlConnection = url.openConnection();
                                 urlConnection.setRequestProperty("Accept-Encoding", "identity");
                                // urlConnection.connect();
